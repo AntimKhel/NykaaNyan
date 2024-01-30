@@ -21,10 +21,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -70,6 +72,11 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     cats: ImmutableList<CatsItem>
 ) {
+    val brush = remember {
+        Brush.linearGradient(
+            colors = GradientColors
+        )
+    }
     LazyColumn(
         modifier = modifier
             .fillMaxSize(),
@@ -83,7 +90,8 @@ fun MainScreen(
         ) {
             ItemCard(
                 modifier = Modifier,
-                cat = it
+                cat = it,
+                brush = brush
             )
         }
     }

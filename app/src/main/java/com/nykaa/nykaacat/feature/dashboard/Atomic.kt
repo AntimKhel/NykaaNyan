@@ -35,6 +35,9 @@ import com.nykaa.nykaacat.model.CatsItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+val GradientColors =
+    listOf(Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Cyan, Color.Magenta)
+
 @Composable
 fun GradientButton(
     modifier: Modifier = Modifier,
@@ -75,7 +78,8 @@ fun GradientButton(
 @Composable
 fun ItemCard(
     modifier: Modifier = Modifier,
-    cat: CatsItem
+    cat: CatsItem,
+    brush: Brush
 ) {
     val density = LocalDensity.current
     val height = remember { with(density) { (cat.height ?: 400).toDp() } }
@@ -100,21 +104,28 @@ fun ItemCard(
                 contentScale = ContentScale.Crop
             )
 
-            Column(modifier = Modifier.align(Alignment.CenterEnd)) {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.66f))
+            ) {
                 Text(
-                    text = cat.id,
-                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+                    text = "Cat #${cat.id}",
+                    modifier = Modifier.padding(horizontal = 12.dp),
                     color = MaterialTheme.colorScheme.inverseSurface,
                     fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        brush = brush
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = "Width ${cat.width} x Height ${cat.height}",
-                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
-                    color = MaterialTheme.colorScheme.inverseSurface,
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    color = MaterialTheme.colorScheme.surface,
                     style = MaterialTheme.typography.labelSmall
                 )
 
