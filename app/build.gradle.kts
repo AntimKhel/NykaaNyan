@@ -105,4 +105,9 @@ dependencies {
     //Flow Collection
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 
+    //Coil- Image loading
+    val coilVersion = "2.5.0"
+    implementation("io.coil-kt:coil-compose:$coilVersion")
+    implementation("io.coil-kt:coil-gif:$coilVersion")
+    implementation("io.coil-kt:coil-svg:$coilVersion")
 }
