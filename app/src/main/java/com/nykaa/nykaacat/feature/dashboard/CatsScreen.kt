@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.nykaa.nykaacat.model.CatsItem
 import com.nykaa.nykaacat.utils.UIState
 import kotlinx.collections.immutable.ImmutableList
@@ -66,13 +66,15 @@ fun CatsScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     cats: ImmutableList<CatsItem>
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize(),
         contentPadding = PaddingValues(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -81,9 +83,9 @@ fun MainScreen(
             items = cats,
             key = { it.id }
         ) {
-            AsyncImage(
-                model = it.url,
-                contentDescription = "cat"
+            ItemCard(
+                modifier = Modifier.animateItemPlacement(tween()),
+                cat = it
             )
         }
     }
