@@ -41,4 +41,6 @@ class CatsViewModel @Inject constructor(
         initialValue = UIState.Loading,
         started = SharingStarted.WhileSubscribed(5000L)
     )
+
+    fun retry() = retryTrigger.retry()
 }

@@ -110,4 +110,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:$coilVersion")
     implementation("io.coil-kt:coil-gif:$coilVersion")
     implementation("io.coil-kt:coil-svg:$coilVersion")
+
+    //Immutable List
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 }

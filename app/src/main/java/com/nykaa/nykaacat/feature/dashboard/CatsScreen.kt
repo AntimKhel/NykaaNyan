@@ -6,10 +6,10 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,10 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.nykaa.nykaacat.model.CatsItem
 import com.nykaa.nykaacat.utils.UIState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun CatsScreen(
@@ -46,27 +51,67 @@ fun CatsScreen(
             label = "cats_anim"
         ) { uiState ->
             when (uiState) {
-                is UIState.Error -> LoadingAnimation()
+                is UIState.Error -> ErrorScreen(onClick = viewModel::retry)
+
                 UIState.Loading -> LoadingAnimation()
-                is UIState.Success -> LazyColumn(
-                    contentPadding = PaddingValues(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    uiState.data?.let { list ->
-                        items(
-                            items = list,
-                            key = { it.id }
-                        ) {
-                            AsyncImage(
-                                model = it.url,
-                                contentDescription = "cat"
-                            )
-                        }
-                    }
+
+                is UIState.Success -> uiState.data?.let {
+                    MainScreen(
+                        cats = it.toImmutableList()
+                    )
                 }
             }
 
+        }
+    }
+}
+
+@Composable
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    cats: ImmutableList<CatsItem>
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(
+            items = cats,
+            key = { it.id }
+        ) {
+            AsyncImage(
+                model = it.url,
+                contentDescription = "cat"
+            )
+        }
+    }
+}
+
+@Composable
+fun ErrorScreen(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Oops! Something went wrong,",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            GradientButton(
+                onClick = onClick
+            )
         }
     }
 }
@@ -85,8 +130,7 @@ fun LoadingAnimation() {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Box(
