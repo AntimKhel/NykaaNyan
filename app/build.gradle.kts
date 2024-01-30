@@ -33,7 +33,7 @@ android {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "https://api.thecatapi.com/v1/images/search?limit=10"
+                value = "\"https://api.thecatapi.com/v1/\""
             )
         }
 
