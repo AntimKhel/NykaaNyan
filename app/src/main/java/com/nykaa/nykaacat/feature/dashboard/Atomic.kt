@@ -34,6 +34,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.nykaa.nykaacat.model.CatsItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlin.math.max
 
 val GradientColors =
     listOf(Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Cyan, Color.Magenta)
@@ -82,7 +83,7 @@ fun ItemCard(
     brush: Brush
 ) {
     val density = LocalDensity.current
-    val height = remember { with(density) { (cat.height ?: 400).toDp() } }
+    val height = remember { with(density) { max(cat.height ?: 600, 600).toDp() } }
     val image = rememberAsyncImagePainter(cat.url)
 
     OutlinedCard(
@@ -108,7 +109,7 @@ fun ItemCard(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.66f))
+                    .background(MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.33f))
             ) {
                 Text(
                     text = "Cat #${cat.id}",
